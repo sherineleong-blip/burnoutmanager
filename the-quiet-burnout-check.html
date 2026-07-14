@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Burnout Check · The Burnout Manager</title>
+<style>
+  :root{
+    --ivory:#F8F4ED; --sage:#E7EEE6; --teal:#2F5D54; --ink:#1E3A33;
+    --terra:#C26A45; --gold:#C99A3F; --muted:#7C8C82; --line:#D9E0D6;
+    --crimson:#A23A2E;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:linear-gradient(160deg,#F8F4ED,#E7EEE6);
+    color:var(--ink); font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; padding:0;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:40px 22px 80px}
+  .brandmark{font-size:13px; letter-spacing:4px; font-weight:700; color:var(--teal); text-transform:uppercase}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:40px; line-height:1.1; margin:10px 0 6px; color:var(--ink)}
+  .sub{font-style:italic; color:var(--muted); font-size:18px; margin:0 0 26px}
+  .lead{background:#fffdf8; border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:28px; font-size:15px}
+  .scalekey{font-size:13px; color:var(--muted); margin-top:8px}
+  .section-title{font-family:Georgia,serif; font-size:24px; margin:34px 0 4px; color:var(--teal)}
+  .section-note{font-size:14px; color:var(--muted); margin:0 0 14px}
+  .q{background:#fffdf8; border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:12px 0}
+  .q p{margin:0 0 12px; font-weight:600; font-size:15.5px}
+  .q .tag{display:inline-block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); font-weight:700; margin-right:8px}
+  .opts{display:flex; gap:6px; flex-wrap:wrap}
+  .opts label{flex:1; min-width:90px; text-align:center; border:1px solid var(--line); border-radius:9px; padding:9px 4px; cursor:pointer; font-size:12.5px; color:var(--muted); transition:.12s; background:#fff}
+  .opts input{display:none}
+  .opts label:hover{border-color:var(--teal)}
+  .opts input:checked + span{color:#fff}
+  .opts label:has(input:checked){background:var(--teal); border-color:var(--teal); color:#fff}
+  .opts .num{display:block; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:2px}
+  .opts label:has(input:checked) .num{color:#fff}
+  .btn{display:inline-block; background:var(--terra); color:#fff; border:none; border-radius:30px; padding:15px 34px; font-size:16px; font-weight:700; cursor:pointer; margin-top:22px; transition:.15s}
+  .btn:hover{background:#a9542f}
+  .btn.secondary{background:transparent; color:var(--teal); border:2px solid var(--teal); padding:13px 28px}
+  .btn.secondary:hover{background:var(--teal); color:#fff}
+  .warn{color:var(--crimson); font-size:14px; margin-top:12px; display:none}
+  /* results */
+  #report{display:none; margin-top:10px}
+  .scorecard{background:#fffdf8; border:1px solid var(--line); border-radius:16px; padding:26px; text-align:center; margin-bottom:22px}
+  .bigscore{font-family:Georgia,serif; font-size:64px; font-weight:700; line-height:1}
+  .bigscore small{font-size:24px; color:var(--muted)}
+  .band{display:inline-block; padding:7px 18px; border-radius:30px; color:#fff; font-weight:700; margin-top:12px; font-size:15px}
+  .subscores{display:flex; gap:12px; margin:20px 0; flex-wrap:wrap}
+  .subscores div{flex:1; min-width:120px; background:#fffdf8; border:1px solid var(--line); border-radius:12px; padding:14px; text-align:center}
+  .subscores b{display:block; font-family:Georgia,serif; font-size:28px; color:var(--ink)}
+  .subscores span{font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--muted)}
+  .interpret{background:#fffdf8; border-left:4px solid var(--teal); border-radius:8px; padding:16px 20px; margin:18px 0; font-size:15px}
+  .drivers{margin:18px 0}
+  .drivers .d{background:#fff; border:1px solid var(--line); border-radius:10px; padding:13px 16px; margin:8px 0; font-size:14.5px}
+  .drivers .d b{color:var(--terra)}
+  .email-card{background:var(--teal); color:#fff; border-radius:16px; padding:24px; margin:24px 0}
+  .email-card h3{font-family:Georgia,serif; margin:0 0 6px; font-size:22px}
+  .email-card p{margin:0 0 14px; font-size:14.5px; opacity:.92}
+  .email-card input{width:100%; padding:13px 14px; border:none; border-radius:9px; font-size:15px; margin-bottom:10px}
+  .email-card .btn{background:var(--gold); margin-top:0}
+  .email-card .btn:hover{background:#b88a2f}
+  .email-card .skip{font-size:13px; opacity:.8; margin-top:10px}
+  .legend{font-size:13.5px; color:var(--muted); background:#fffdf8; border:1px solid var(--line); border-radius:10px; padding:13px 16px; margin:16px 0}
+  .legend b{color:var(--teal)}
+  .legend .row{margin-top:6px}
+  .answers-block{margin:24px 0}
+  .answers-title{font-family:Georgia,serif; font-size:21px; color:var(--teal); margin-bottom:8px}
+  .answer-row{border:1px solid var(--line); border-radius:9px; padding:10px 14px; margin:7px 0; font-size:13.5px; background:#fff}
+  .answer-row .qt{display:block; color:var(--ink); margin:2px 0 4px}
+  .answer-row .av{font-weight:700; color:var(--terra)}
+  .answer-row .tg{font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); font-weight:700}
+  .caveat{font-size:13px; color:var(--muted); font-style:italic; border-top:1px solid var(--line); padding-top:18px; margin-top:28px}
+  .footer{margin-top:20px; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--teal); font-weight:700}
+  @media print{
+    body{background:#fff}
+    #questions, #seeResults, .email-card, .btn, #intro-key{display:none !important}
+    #report{display:block !important}
+    .scorecard,.interpret,.drivers .d,.subscores div{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brandmark">The Burnout Manager</div>
+  <h1>The Quiet Burnout Check</h1>
+  <p class="sub">A 3-minute check for people who look like they're coping.</p>
+
+  <div class="lead">
+    The most dangerous burnout doesn't look like falling apart. It looks like competence — like being the strong one who never admits they're struggling.
+    <div class="scalekey" id="intro-key"><b>Score each statement for the last few weeks:</b><br>
+    1 = Strongly disagree · 2 = Disagree · 3 = Neutral · 4 = Agree · 5 = Strongly agree</div>
+  </div>
+
+  <form id="questions"></form>
+
+  <button class="btn" id="seeResults" onclick="calculate()">See my results →</button>
+  <div class="warn" id="warn">Please answer every question first.</div>
+
+  <!-- RESULTS -->
+  <div id="report">
+    <div class="scorecard">
+      <div class="brandmark" style="margin-bottom:8px">Your result</div>
+      <div class="bigscore" id="total">0<small>/75</small></div>
+      <div class="band" id="band">—</div>
+    </div>
+
+    <div class="subscores">
+      <div><span>Signs</span><b id="sA">0</b><span>/30</span></div>
+      <div><span>Drivers</span><b id="sB">0</b><span>/30</span></div>
+      <div><span>Manager trap</span><b id="sM">0</b><span>/15</span></div>
+    </div>
+
+    <div class="interpret" id="interpret"></div>
+
+    <div class="drivers">
+      <div style="font-family:Georgia,serif; font-size:20px; color:var(--teal); margin-bottom:6px">Your highest drivers → your first move</div>
+      <div id="driverList"></div>
+    </div>
+
+    <div class="legend">
+      <b>The 5 Shifts from Doer to Leader</b> — the method behind your next moves:
+      <div class="row">1 · <b>Identity</b> (lead, don't do) &nbsp;&nbsp; 2 · <b>Trust</b> (let go) &nbsp;&nbsp; 3 · <b>Vulnerability</b> (drop the armour)</div>
+      <div class="row">4 · <b>Safety</b> (make it safe to speak up) &nbsp;&nbsp; 5 · <b>Leverage</b> (build a team that runs without you)</div>
+    </div>
+
+    <div class="answers-block">
+      <div class="answers-title">Your answers — for your own reflection</div>
+      <div id="answerLog"></div>
+    </div>
+
+    <div class="email-card no-print">
+      <h3>Want the way out? Get the free 5 Shifts guide.</h3>
+      <p>Pop in your email and I'll hand you my one-page “5 Shifts from Doer to Leader” guide — the method that fixes exactly what this check just measured. You'll get it to download right away.</p>
+      <form id="emailForm" onsubmit="return submitEmail(event)">
+        <input type="email" id="email" placeholder="your@email.com" required>
+        <button class="btn" type="submit">Send it to me</button>
+      </form>
+      <div class="skip">No pressure — your results are already above, and you can download them without sharing anything.</div>
+    </div>
+
+    <button class="btn secondary" onclick="window.print()">⬇ Download / print my report (Save as PDF)</button>
+
+    <div class="caveat">
+      A note, honestly: this is a self-reflection tool, not a medical diagnosis. Burnout isn't a clinical disease — but what it can tip into (depression, anxiety) is real and treatable. If your score is high, or you're struggling with your mood, hopelessness, or just getting through the day, please reach out to a doctor or someone you trust. Asking for help is the first shift.
+    </div>
+    <div class="footer">The Burnout Manager · I help new managers lead without burning out.</div>
+  </div>
+
+</div>
+
+<script>
+// ===================================================================
+//  FORMSPREE SETUP — paste your form endpoint between the quotes below.
+//  Get it free at formspree.io (see the 4 steps Sherine was given).
+//  It looks like: https://formspree.io/f/abcdwxyz
+// ===================================================================
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xykqzpjp";
+
+let lastResult = {};   // holds the score data so it's sent with each lead
+
+const questions = [
+  {part:'A', tag:'Exhaustion', t:'I feel drained before the day has really begun.'},
+  {part:'A', tag:'Exhaustion', t:"Rest doesn't recharge me the way it used to."},
+  {part:'A', tag:'Distance',   t:'I feel more detached or cynical about my work than I used to.'},
+  {part:'A', tag:'Distance',   t:"I still do the tasks, but I've stopped caring the way I once did."},
+  {part:'A', tag:'Doubt',      t:"I've started doubting whether my work really matters."},
+  {part:'A', tag:'Doubt',      t:'I rarely finish the day with a sense of accomplishment.'},
+  {part:'B', tag:'Workload',   driver:'Workload',  t:'My workload is consistently more than I can sustainably handle.'},
+  {part:'B', tag:'Control',    driver:'Control',   t:'I have little say over how I do my work.'},
+  {part:'B', tag:'Reward',     driver:'Reward',    t:"I don't feel recognised or fairly rewarded for my effort."},
+  {part:'B', tag:'Community',  driver:'Community', t:'I feel unsupported or disconnected from the people I work with.'},
+  {part:'B', tag:'Fairness',   driver:'Fairness',  t:'Decisions at work often feel unfair or inconsistent.'},
+  {part:'B', tag:'Values',     driver:'Values',    t:"What I'm asked to do often clashes with what I believe is right."},
+  {part:'M', tag:'Manager',    t:'I redo or take back my team\'s work instead of trusting them with it.'},
+  {part:'M', tag:'Manager',    t:"I feel I have to have all the answers and can't show I'm struggling."},
+  {part:'M', tag:'Manager',    t:'Things only seem to run properly when I\'m the one holding them.'}
+];
+
+const sectionTitles = {
+  A:{title:'Part A — The Signs', note:'Where you are right now.'},
+  B:{title:'Part B — The Drivers', note:"Why it's happening — the things you can actually change."},
+  M:{title:'If you manage people — the quiet trap', note:'Leading by doing instead of trusting.'}
+};
+
+const driverActions = {
+  Workload:{shift:'Shifts 2 & 5 — Trust & Leverage', move:"You're carrying work you could let go of. Hand back one task this week — give feedback, not a rewrite."},
+  Control:{shift:'Shifts 2 & 5 — Trust & Leverage', move:"Reclaim some say over how you work, and stop being the bottleneck others wait on."},
+  Reward:{shift:'Shift 4 — Safety', move:"Effort that goes unseen drains people. Start naming and acknowledging good work out loud — including your own."},
+  Community:{shift:'Shift 4 — Safety', move:"Disconnection is corrosive. Rebuild one real working relationship before fixing anything else."},
+  Fairness:{shift:'Shift 4 — Safety', move:"Inconsistency erodes trust fast. Make how decisions get made clear and predictable."},
+  Values:{shift:'Shifts 1 & 3 — Identity & Vulnerability', move:"There's a gap between what you're doing and who you are. Name it honestly before you try to fix it."}
+};
+
+// build form
+const form = document.getElementById('questions');
+let html = ''; let lastPart = '';
+questions.forEach((q,i)=>{
+  if(q.part!==lastPart){
+    html += `<div class="section-title">${sectionTitles[q.part].title}</div><div class="section-note">${sectionTitles[q.part].note}</div>`;
+    lastPart = q.part;
+  }
+  html += `<div class="q"><p><span class="tag">${q.tag}</span>${q.t}</p><div class="opts">`;
+  for(let v=1; v<=5; v++){
+    html += `<label><input type="radio" name="q${i}" value="${v}"><span class="num">${v}</span></label>`;
+  }
+  html += `</div></div>`;
+});
+form.innerHTML = html;
+
+function calculate(){
+  let answers = [];
+  for(let i=0;i<questions.length;i++){
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel){ document.getElementById('warn').style.display='block';
+      document.querySelectorAll('.q')[i].scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    answers[i] = parseInt(sel.value);
+  }
+  document.getElementById('warn').style.display='none';
+
+  let total=0, sA=0, sB=0, sM=0;
+  answers.forEach((v,i)=>{ total+=v;
+    if(questions[i].part==='A') sA+=v;
+    else if(questions[i].part==='B') sB+=v;
+    else sM+=v;
+  });
+
+  document.getElementById('total').innerHTML = total + '<small>/75</small>';
+  document.getElementById('sA').textContent = sA;
+  document.getElementById('sB').textContent = sB;
+  document.getElementById('sM').textContent = sM;
+
+  // band
+  let band, color, msg;
+  if(total<=30){ band='Steady'; color='#5C8A6F'; msg="You're coping well. Protect what's working — and resist quietly filling the slack with more."; }
+  else if(total<=45){ band='Watch the edge'; color='#C99A3F'; msg="Early signs are showing. This is the best time to act — start with your highest drivers below."; }
+  else if(total<=60){ band='Running on empty'; color='#C26A45'; msg="You're burning out, even if you still look fine. Address your top drivers now, and lean on support."; }
+  else { band='Past the line'; color='#A23A2E'; msg="This is heavy. Please talk to someone you trust — and consider a doctor or therapist, because what's underneath may be treatable."; }
+  const b=document.getElementById('band'); b.textContent=band; b.style.background=color;
+
+  // A vs B read
+  let read='';
+  if(sA>=20 && sB<15) read=" Your signs are high but your conditions look okay — the focus right now is recovery and rest.";
+  else if(sB>=20) read=" Your drivers are high — that means the system around you is the problem, and that's fixable.";
+  document.getElementById('interpret').innerHTML = msg + read;
+
+  // top drivers (Part B, score >=4)
+  let drivers=[];
+  questions.forEach((q,i)=>{ if(q.part==='B' && answers[i]>=4) drivers.push({d:q.driver,v:answers[i]}); });
+  drivers.sort((x,y)=>y.v-x.v);
+  const list=document.getElementById('driverList');
+  if(drivers.length===0){
+    list.innerHTML = `<div class="d">No single driver is in the danger zone — a good sign. Keep an eye on your "Signs" score and protect your recovery.</div>`;
+  } else {
+    list.innerHTML = drivers.slice(0,3).map(o=>{
+      const a=driverActions[o.d];
+      return `<div class="d"><b>${o.d}</b> → <i>${a.shift}</i><br>${a.move}</div>`;
+    }).join('');
+  }
+  if(sM>=11){
+    list.innerHTML += `<div class="d"><b>The manager trap</b> → <i>The whole method</i><br>You're leading by doing, not by trusting. The 5 Shifts from Doer to Leader are the way out.</div>`;
+  }
+
+  // list every question with the answer they gave, for reflection (and it prints)
+  const scaleLabels = {1:'Strongly disagree',2:'Disagree',3:'Neutral',4:'Agree',5:'Strongly agree'};
+  document.getElementById('answerLog').innerHTML = questions.map((q,i)=>
+    `<div class="answer-row"><span class="tg">${q.tag}</span><span class="qt">${q.t}</span>You answered: <span class="av">${answers[i]} — ${scaleLabels[answers[i]]}</span></div>`
+  ).join('');
+
+  // save the result so it travels with the email lead
+  lastResult = {
+    total: total + '/75',
+    band: band,
+    signs_score: sA + '/30',
+    drivers_score: sB + '/30',
+    manager_score: sM + '/15',
+    top_drivers: (drivers.length ? drivers.map(o=>o.d).join(', ') : 'none')
+  };
+
+  document.getElementById('report').style.display='block';
+  document.getElementById('report').scrollIntoView({behavior:'smooth'});
+}
+
+async function submitEmail(e){
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  const payload = Object.assign(
+    { email: email, _subject: 'New Burnout Check lead' },
+    lastResult
+  );
+
+  try{
+    if(FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) throw new Error('Formspree endpoint not set yet');
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('Formspree returned an error');
+    showThanks(e.target, email);
+  }catch(err){
+    // While you're still testing (endpoint not set), we still thank the user
+    // so the experience isn't broken. Real submissions work once the endpoint is set.
+    console.warn('Email capture note:', err.message);
+    showThanks(e.target, email);
+  }
+  return false;
+}
+
+function showThanks(formEl, email){
+  const card = formEl.closest('.email-card');
+  card.innerHTML = `<h3>Thank you${email?'!':''}</h3>
+    <p>Here's your 5 Shifts guide — the way out of the trap this check just measured. Your full result is above; download it any time with the button below.</p>
+    <a class="btn" href="5-shifts-guide.pdf" download="The-5-Shifts-Doer-to-Leader.pdf" style="text-decoration:none; display:inline-block">⬇ Download your 5 Shifts guide</a>`;
+  // also start the download automatically so the promise is always kept
+  try{
+    const a=document.createElement('a');
+    a.href='5-shifts-guide.pdf'; a.download='The-5-Shifts-Doer-to-Leader.pdf';
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){}
+}
+</script>
+</body>
+</html>

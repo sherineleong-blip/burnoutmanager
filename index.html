@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Burnout Manager · Lead without burning out</title>
+<meta name="description" content="Your best managers look fine. That's the problem. Check your burnout risk — or your organisation's — and see what it's quietly costing you.">
+<style>
+  :root{
+    --ivory:#F8F4ED; --sage:#E7EEE6; --teal:#2F5D54; --ink:#1E3A33;
+    --terra:#C26A45; --gold:#C99A3F; --muted:#7C8C82; --line:#D9E0D6;
+    --crimson:#A23A2E;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:linear-gradient(160deg,#F8F4ED,#E7EEE6);
+    color:var(--ink); font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:0 22px}
+  section{padding:56px 0}
+  .brandmark{font-size:13px; letter-spacing:4px; font-weight:700; color:var(--teal); text-transform:uppercase}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:46px; line-height:1.08; margin:14px 0 10px; color:var(--ink)}
+  h2{font-family:Georgia,serif; font-size:32px; line-height:1.15; margin:0 0 8px; color:var(--teal)}
+  h3{font-family:Georgia,serif; font-size:21px; margin:0 0 6px; color:var(--ink)}
+  .kicker{font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:8px}
+  .sub{font-style:italic; color:var(--muted); font-size:19px; margin:0 0 22px}
+  .prose{font-size:16.5px; max-width:640px}
+  .prose p{margin:0 0 16px}
+  .btn{display:inline-block; background:var(--terra); color:#fff; border:none; border-radius:30px; padding:15px 34px; font-size:16px; font-weight:700; cursor:pointer; transition:.15s; text-decoration:none}
+  .btn:hover{background:#a9542f}
+  .btn.secondary{background:transparent; color:var(--teal); border:2px solid var(--teal); padding:13px 28px}
+  .btn.secondary:hover{background:var(--teal); color:#fff}
+  .btn.gold{background:var(--gold)}
+  .btn.gold:hover{background:#b88a2f}
+  .card{background:#fffdf8; border:1px solid var(--line); border-radius:14px; padding:20px 22px}
+  /* hero */
+  .hero{padding:70px 0 60px}
+  .hero .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:26px}
+  .hero-tag{display:inline-block; background:var(--sage); border:1px solid var(--line); color:var(--teal); font-size:13px; font-weight:700; letter-spacing:1px; padding:6px 14px; border-radius:30px; margin-top:16px}
+  /* stats */
+  .statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-top:22px}
+  .stat{background:#fffdf8; border:1px solid var(--line); border-radius:14px; padding:20px; text-align:center}
+  .stat b{display:block; font-family:Georgia,serif; font-size:40px; color:var(--terra); line-height:1.1}
+  .stat span{font-size:13.5px; color:var(--muted); display:block; margin-top:6px}
+  .sourcenote{font-size:12.5px; color:var(--muted); margin-top:12px; font-style:italic}
+  /* calculator */
+  .calc{background:var(--teal); color:#fff; border-radius:18px; padding:30px; margin-top:24px}
+  .calc h3{color:#fff; font-size:24px}
+  .calc p{opacity:.9; font-size:14.5px}
+  .calc .fields{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:18px 0}
+  .calc label{display:block; font-size:13px; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:6px; opacity:.85}
+  .calc input{width:100%; padding:13px 14px; border:none; border-radius:9px; font-size:16px}
+  .calc-out{display:none; background:#fffdf8; color:var(--ink); border-radius:12px; padding:22px; margin-top:18px}
+  .calc-out .big{font-family:Georgia,serif; font-size:38px; color:var(--crimson); font-weight:700; line-height:1.1}
+  .calc-out .rangebar{font-size:14px; color:var(--muted); margin-top:4px}
+  .calc-out ul{margin:12px 0 0; padding-left:20px; font-size:14.5px}
+  .calc-out li{margin:6px 0}
+  /* framework */
+  .shift{display:flex; gap:16px; background:#fffdf8; border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:12px 0}
+  .shift .letter{font-family:Georgia,serif; font-size:34px; font-weight:700; color:var(--gold); min-width:44px; line-height:1}
+  .shift p{margin:4px 0 0; font-size:14.5px}
+  .shift .trap{color:var(--crimson)}
+  /* quiz */
+  .toggle{display:flex; gap:0; border:2px solid var(--teal); border-radius:30px; overflow:hidden; width:fit-content; margin:20px 0}
+  .toggle button{border:none; background:transparent; padding:13px 26px; font-size:15px; font-weight:700; color:var(--teal); cursor:pointer}
+  .toggle button.active{background:var(--teal); color:#fff}
+  .q{background:#fffdf8; border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:12px 0}
+  .q p{margin:0 0 12px; font-weight:600; font-size:15.5px}
+  .q .tag{display:inline-block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); font-weight:700; margin-right:8px}
+  .opts{display:flex; gap:6px; flex-wrap:wrap}
+  .opts label{flex:1; min-width:88px; text-align:center; border:1px solid var(--line); border-radius:9px; padding:9px 4px; cursor:pointer; font-size:12.5px; color:var(--muted); transition:.12s; background:#fff}
+  .opts input{display:none}
+  .opts label:hover{border-color:var(--teal)}
+  .opts label:has(input:checked){background:var(--teal); border-color:var(--teal); color:#fff}
+  .opts .num{display:block; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:2px}
+  .opts label:has(input:checked) .num{color:#fff}
+  .warn{color:var(--crimson); font-size:14px; margin-top:12px; display:none}
+  .scalekey{font-size:13.5px; color:var(--muted); background:#fffdf8; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:14px 0}
+  /* results */
+  #report{display:none; margin-top:26px}
+  .scorecard{background:#fffdf8; border:1px solid var(--line); border-radius:16px; padding:26px; text-align:center; margin-bottom:22px}
+  .bigscore{font-family:Georgia,serif; font-size:60px; font-weight:700; line-height:1}
+  .bigscore small{font-size:22px; color:var(--muted)}
+  .band{display:inline-block; padding:7px 18px; border-radius:30px; color:#fff; font-weight:700; margin-top:12px; font-size:15px}
+  .dimbars{margin:18px 0}
+  .dim{margin:10px 0}
+  .dim .lbl{display:flex; justify-content:space-between; font-size:13.5px; font-weight:700; margin-bottom:4px}
+  .dim .track{background:var(--sage); border-radius:20px; height:12px; overflow:hidden}
+  .dim .fill{height:100%; border-radius:20px; background:var(--teal); transition:.4s}
+  .interpret{background:#fffdf8; border-left:4px solid var(--teal); border-radius:8px; padding:16px 20px; margin:18px 0; font-size:15px}
+  .prog{border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:10px 0; background:#fff}
+  .prog .pri{display:inline-block; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; padding:4px 12px; border-radius:20px; color:#fff; margin-bottom:8px}
+  .prog .pri.critical{background:var(--crimson)}
+  .prog .pri.recommended{background:var(--terra)}
+  .prog .pri.watch{background:var(--gold)}
+  .prog h4{margin:0 0 4px; font-family:Georgia,serif; font-size:18px}
+  .prog p{margin:0; font-size:14px; color:var(--muted)}
+  .email-card{background:var(--teal); color:#fff; border-radius:16px; padding:26px; margin:24px 0}
+  .email-card h3{color:#fff; margin:0 0 6px; font-size:22px}
+  .email-card p{margin:0 0 14px; font-size:14.5px; opacity:.92}
+  .email-card input{width:100%; padding:13px 14px; border:none; border-radius:9px; font-size:15px; margin-bottom:10px}
+  .email-card .btn{margin-top:0}
+  #thanks{display:none}
+  /* programs static */
+  .proggrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:20px}
+  .proggrid .card h3{color:var(--teal)}
+  .proggrid .card p{font-size:14.5px; margin:6px 0 0}
+  .hrdc{display:inline-block; background:var(--sage); color:var(--teal); font-size:12px; font-weight:700; letter-spacing:1px; padding:4px 12px; border-radius:20px; margin-top:10px}
+  /* about */
+  .about{background:#fffdf8; border:1px solid var(--line); border-radius:18px; padding:30px}
+  .caveat{font-size:13px; color:var(--muted); font-style:italic; border-top:1px solid var(--line); padding-top:18px; margin-top:36px}
+  .footer{padding:26px 0 60px; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--teal); font-weight:700}
+  @media(max-width:600px){ h1{font-size:34px} h2{font-size:26px} .opts label{min-width:56px} }
+  /* print = downloadable results */
+  .print-header{display:none}
+  @media print{
+    body{background:#fff}
+    section, .hero{display:none !important; padding:0}
+    #check{display:block !important}
+    #check .toggle, #check .scalekey, #check #questions, #check #seeResults, #check .warn, #check .prose, #check .kicker, #check h2{display:none !important}
+    #report{display:block !important}
+    .email-card, #downloadBtn{display:none !important}
+    .print-header{display:block; margin-bottom:20px}
+    .scorecard,.interpret,.prog,.dim{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="brandmark">The Burnout Manager</div>
+  <h1>Your best managers look fine.<br>That's the problem.</h1>
+  <p class="sub">Because burnout doesn't always look like burnout. Sometimes it looks like a really good spreadsheet.</p>
+  <div class="prose">
+    <p>They answer every email. They stay late to "tidy up" the team's work. Everyone asks them, <em>"How do you do so much?"</em></p>
+    <p>Then one day they resign — and everyone is shocked. Except them. They'd been leaving for months.</p>
+    <p>I help new managers lead without burning out — and I help organisations catch it before the resignation letter arrives.</p>
+  </div>
+  <div class="cta-row">
+    <a href="#check" class="btn" onclick="setTrack('org')">Check your organisation →</a>
+    <a href="#check" class="btn secondary" onclick="setTrack('me')">Check yourself →</a>
+  </div>
+  <div class="hero-tag">Burnout is a trust problem, not a workload problem.</div>
+</section>
+
+<!-- ============ THE PROBLEM ============ -->
+<section>
+  <div class="kicker">The quiet pattern</div>
+  <h2>How organisations lose their best people</h2>
+  <div class="prose">
+    <p>It almost always starts the same way. You promote your best doer. Nobody teaches them how to lead, so they do the only thing they know — more.</p>
+    <p>They redo the team's work at night and call it "high standards." They stop asking questions because managers are supposed to have answers. Slowly, the team learns their effort doesn't count — so they stop trying. Now your manager is carrying everything.</p>
+    <p>And the load doesn't stop at the office door. They go home and start the second shift — kids, family, life. There is no clock-out.</p>
+    <p>From the outside, it looks like competence. From the inside, it's someone quietly deciding to leave.</p>
+  </div>
+
+  <div class="statgrid">
+    <div class="stat"><b>36%</b><span>Managers are 36% more likely to report burnout than the people they manage (Gallup)</span></div>
+    <div class="stat"><b>24%</b><span>more likely to be considering quitting in the next six months (Gallup)</span></div>
+    <div class="stat"><b>200%</b><span>Replacing a manager can cost up to 200% of their annual salary (Gallup / SHRM: 50–200%)</span></div>
+    <div class="stat"><b>70%</b><span>of the variance in team engagement is driven by the manager (Gallup)</span></div>
+  </div>
+  <div class="sourcenote">Sources: Gallup State of the Global Workplace 2025; Gallup &amp; SHRM turnover-cost research.</div>
+</section>
+
+<!-- ============ COST CALCULATOR ============ -->
+<section id="cost">
+  <div class="kicker">The cost of doing nothing</div>
+  <h2>What is manager burnout quietly costing you?</h2>
+  <div class="prose">
+    <p>Most organisations never put a number on it — because the managers still show up. Here's the number.</p>
+  </div>
+  <div class="calc">
+    <h3>Your cost-of-inaction estimate</h3>
+    <p>Three inputs. No email needed. The maths is shown, not hidden.</p>
+    <div class="fields">
+      <div>
+        <label for="c-managers">Number of managers</label>
+        <input type="number" id="c-managers" min="1" placeholder="e.g. 20">
+      </div>
+      <div>
+        <label for="c-salary">Avg. manager salary (RM / month)</label>
+        <input type="number" id="c-salary" min="1000" placeholder="e.g. 8000">
+      </div>
+      <div>
+        <label for="c-risk">% you'd guess are at risk</label>
+        <input type="number" id="c-risk" min="1" max="100" value="20">
+      </div>
+    </div>
+    <button class="btn gold" onclick="calcCost()">Show me the number →</button>
+    <div class="calc-out" id="calcOut">
+      <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700">If your at-risk managers leave</div>
+      <div class="big" id="costMid">RM 0</div>
+      <div class="rangebar" id="costRange"></div>
+      <ul id="costDetail"></ul>
+      <p style="font-size:13px; color:var(--muted); font-style:italic; margin:12px 0 0">
+        Based on Gallup/SHRM research: replacing a manager costs 50–200% of annual salary (recruiting, onboarding, lost productivity, lost knowledge, team disruption). The headline figure uses the midpoint (125%). Your real number also grows quietly before anyone resigns — burnt-out managers disengage their whole team first.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST FRAMEWORK ============ -->
+<section id="framework">
+  <div class="kicker">The method</div>
+  <h2>The TRUST Framework — 5 shifts from doer to leader</h2>
+  <div class="prose">
+    <p>Great managers aren't the ones who do the most. They're the ones who let go the most.</p>
+    <p>New managers don't fail because they lack frameworks. They fail because the thing that got them promoted — doing everything well themselves — is now the thing drowning them. These are the five shifts out.</p>
+  </div>
+
+  <div class="shift"><div class="letter">T</div><div>
+    <h3>Transform — from doer to leader of doers</h3>
+    <p class="trap">The trap: you were promoted for being the best at the work, so you keep doing the work.</p>
+    <p>The shift: your job is no longer to produce. It's to multiply — to make your people capable.</p>
+  </div></div>
+  <div class="shift"><div class="letter">R</div><div>
+    <h3>Release — from control to trust</h3>
+    <p class="trap">The trap: you quietly redo your team's work after hours and call it "high standards."</p>
+    <p>The shift: redoing their work tells them their effort doesn't count — so they stop trying. Standards rise when you coach in the open, not correct in secret.</p>
+  </div></div>
+  <div class="shift"><div class="letter">U</div><div>
+    <h3>Unmask — from armour to honesty</h3>
+    <p class="trap">The trap: you think a manager must have all the answers, so you never ask.</p>
+    <p>The shift: "I don't know — let's figure it out together" builds trust faster than performed certainty ever will.</p>
+  </div></div>
+  <div class="shift"><div class="letter">S</div><div>
+    <h3>Safety — from fear to safety</h3>
+    <p class="trap">The trap: people hide mistakes and stay quiet, because being wrong feels unsafe.</p>
+    <p>The shift: teams do their best work when it's safe to try, fail, and speak up. Reward the person who flags the problem, not just the one who fixes it.</p>
+  </div></div>
+  <div class="shift"><div class="letter">T</div><div>
+    <h3>Transfer — from indispensable to scalable</h3>
+    <p class="trap">The trap: being needed feels like value, so you make yourself the bottleneck.</p>
+    <p>The shift: a team that runs well when you're <em>not</em> in the room is the real measure of leadership.</p>
+  </div></div>
+</section>
+
+<!-- ============ THE CHECK ============ -->
+<section id="check">
+  <div class="kicker">The check</div>
+  <h2>Is burnout already in the building?</h2>
+  <div class="prose">
+    <p>Two versions of the same 3-minute check. Pick your seat.</p>
+  </div>
+
+  <div class="toggle">
+    <button id="tab-me" onclick="setTrack('me')">I'm a manager</button>
+    <button id="tab-org" class="active" onclick="setTrack('org')">I run / HR an organisation</button>
+  </div>
+
+  <div class="scalekey"><b>Score each statement for the last few weeks:</b><br>
+  1 = Strongly disagree · 2 = Disagree · 3 = Neutral · 4 = Agree · 5 = Strongly agree</div>
+
+  <form id="questions"></form>
+  <button class="btn" id="seeResults" onclick="calculate()">See my results →</button>
+  <div class="warn" id="warn">Please answer every question first.</div>
+
+  <!-- RESULTS -->
+  <div id="report">
+    <div class="print-header">
+      <div class="brandmark">The Burnout Manager</div>
+      <div style="font-family:Georgia,serif; font-size:26px; margin-top:6px" id="printTitle">Your results</div>
+      <div style="font-size:13px; color:var(--muted)" id="printDate"></div>
+    </div>
+    <div class="scorecard">
+      <div class="brandmark" style="margin-bottom:8px">Your result</div>
+      <div class="bigscore"><span id="total">0</span><small>/75</small></div>
+      <div class="band" id="band">—</div>
+    </div>
+    <div class="dimbars" id="dimbars"></div>
+    <div class="interpret" id="interpret"></div>
+
+    <div id="progBlock">
+      <h3 style="font-family:Georgia,serif; color:var(--teal); font-size:22px; margin:26px 0 4px">What your result is asking for</h3>
+      <p style="font-size:14px; color:var(--muted); margin:0 0 10px">Matched from your highest-scoring areas — not a one-size-fits-all pitch.</p>
+      <div id="progList"></div>
+    </div>
+
+    <div id="costEcho" style="display:none" class="interpret"></div>
+
+    <button class="btn secondary" id="downloadBtn" onclick="downloadResults()" style="margin:6px 0 10px">Download my results (PDF) ↓</button>
+
+    <!-- CTA: email capture + booking -->
+    <div class="email-card" id="ctaCard">
+      <h3>Get your full result — and what to do about it</h3>
+      <p>Leave your email and I'll send you your breakdown with the free 5-Shifts guide. No spam, no drip campaign. Just the next step.</p>
+      <form id="leadForm" onsubmit="return sendLead(event)">
+        <input type="text" id="leadName" placeholder="Your name" required>
+        <input type="email" id="leadEmail" placeholder="you@company.com" required>
+        <input type="text" id="leadOrg" placeholder="Company (optional)">
+        <button class="btn gold" type="submit" id="leadBtn">Send me my results →</button>
+      </form>
+      <div id="thanks">
+        <h3>Done — check your inbox soon.</h3>
+        <p>If this raised a flag, the fastest next step is a 30-minute call. No pitch — we'll walk through your result and what I'd do first.</p>
+        <a class="btn gold" href="https://wa.me/60149303591?text=Hi%20Sherine%2C%20I%20just%20did%20the%20burnout%20check%20and%20I%27d%20like%20to%20book%20a%2030-minute%20call." target="_blank">Book a 30-minute call on WhatsApp →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMS ============ -->
+<section id="programs">
+  <div class="kicker">How I help</div>
+  <h2>Four ways in — matched to what the check finds</h2>
+  <div class="proggrid">
+    <div class="card">
+      <h3>TRUST Manager Training</h3>
+      <p>My signature program for new and overwhelmed managers — the 5 shifts from doer to leader, taught with real stories, not theory. For the managers who got promoted and handed nothing.</p>
+      <span class="hrdc">HRDC levy-claimable</span>
+    </div>
+    <div class="card">
+      <h3>1-on-1 Coaching</h3>
+      <p>For the manager who's already running on empty. Private, practical sessions to put down what they're carrying — before they put down their resignation.</p>
+    </div>
+    <div class="card">
+      <h3>Team Building &amp; Cohesion</h3>
+      <p>When the team has stopped talking, stopped trying, or split into silos — a cohesion roadmap and team building that rebuilds trust, not just plays games.</p>
+    </div>
+    <div class="card">
+      <h3>Leadership Retreats &amp; Workshops</h3>
+      <p>For the leadership team itself. Because if the top table models overwork, every manager below copies it. Culture is set in that room.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section>
+  <div class="about">
+    <div class="kicker">Why me</div>
+    <h2>I was the burnout manager.</h2>
+    <div class="prose">
+      <p>I spent 20+ years in financial services. I was the one who stayed back almost every night fixing my team's work — because it felt faster than explaining. My staff learned I'd fix everything, so they stopped trying. Everyone asked how I did so much. Nobody asked why I had to.</p>
+      <p>It took me years to see it wasn't a workload problem. It was a trust problem — and I built the way out into a method I now teach.</p>
+      <p>I'm an HRDC-accredited trainer, and everything in my programs comes from having lived it, not just read about it.</p>
+      <p><strong>I'm Sherine — I help new managers lead without burning out. Always happy to connect.</strong></p>
+    </div>
+  </div>
+
+  <div class="caveat">
+    A note, honestly: the check on this page is a self-reflection and organisational-health tool, not a medical diagnosis. Burnout isn't a clinical disease — but the things it can tip into (depression, anxiety) are real and treatable. If someone is struggling, please point them to a doctor or someone they trust. Asking for help is the first shift.
+  </div>
+  <div class="footer">The Burnout Manager · Lead without burning out</div>
+</section>
+
+</div>
+
+<script>
+/* ================= QUESTION BANKS ================= */
+const BANKS = {
+  me: {
+    label: "Individual check — The Quiet Burnout Check",
+    dims: [
+      {id:"signs", name:"The Signs (how close to the edge)", max:30},
+      {id:"drivers", name:"The Drivers (why it's happening)", max:30},
+      {id:"trap", name:"The Manager Trap", max:15}
+    ],
+    questions: [
+      {d:"signs", tag:"Exhaustion", t:"I feel drained before the day has really begun."},
+      {d:"signs", tag:"Exhaustion", t:"Rest doesn't recharge me the way it used to."},
+      {d:"signs", tag:"Distance", t:"I feel more detached or cynical about my work than I used to."},
+      {d:"signs", tag:"Distance", t:"I still do the tasks, but I've stopped caring the way I once did."},
+      {d:"signs", tag:"Doubt", t:"I've started doubting whether my work really matters."},
+      {d:"signs", tag:"Doubt", t:"I rarely finish the day with a sense of accomplishment."},
+      {d:"drivers", tag:"Workload", t:"My workload is consistently more than I can sustainably handle."},
+      {d:"drivers", tag:"Control", t:"I have little say over how I do my work."},
+      {d:"drivers", tag:"Reward", t:"I don't feel recognised or fairly rewarded for my effort."},
+      {d:"drivers", tag:"Community", t:"I feel unsupported or disconnected from the people I work with."},
+      {d:"drivers", tag:"Fairness", t:"Decisions at work often feel unfair or inconsistent."},
+      {d:"drivers", tag:"Values", t:"What I'm asked to do often clashes with what I believe is right."},
+      {d:"trap", tag:"Trust", t:"I redo or take back my team's work instead of trusting them with it."},
+      {d:"trap", tag:"Armour", t:"I feel I have to have all the answers and can't show I'm struggling."},
+      {d:"trap", tag:"Bottleneck", t:"Things only seem to run properly when I'm the one holding them."}
+    ],
+    bands: [
+      {min:15, max:30, label:"Steady", color:"var(--teal)", text:"You're coping well. Protect what's working — don't quietly fill the slack with more."},
+      {min:31, max:45, label:"Watch the edge", color:"var(--gold)", text:"Early signs are showing. This is the best time to act — look at your highest-scoring areas below."},
+      {min:46, max:60, label:"Running on empty", color:"var(--terra)", text:"You're burning out, even if you still look fine to everyone else. Address your top drivers now, and lean on support."},
+      {min:61, max:75, label:"Past the line", color:"var(--crimson)", text:"This is heavy. Please talk to someone you trust — and consider a doctor or therapist, because what's underneath may be treatable."}
+    ]
+  },
+  org: {
+    label: "Organisation check — for HR & leadership",
+    dims: [
+      {id:"ready", name:"New-manager readiness", max:15},
+      {id:"load", name:"Manager load & burnout signals", max:15},
+      {id:"cohesion", name:"Team cohesion", max:15},
+      {id:"culture", name:"Leadership culture & safety", max:15},
+      {id:"retention", name:"Retention risk", max:15}
+    ],
+    questions: [
+      {d:"ready", tag:"Promotion", t:"We promote our best performers into management with little or no leadership training."},
+      {d:"ready", tag:"Doer-managers", t:"Our managers still do a large share of their team's hands-on work themselves."},
+      {d:"ready", tag:"Redo habit", t:"Managers here quietly redo or 'polish' their team's work instead of coaching it."},
+      {d:"load", tag:"Hours", t:"Our managers routinely work evenings or weekends just to keep up."},
+      {d:"load", tag:"Withdrawal", t:"Some managers have gone quieter — fewer ideas, less energy, more sick leave."},
+      {d:"load", tag:"No relief", t:"When a manager is overloaded, there's no real mechanism to take anything off their plate."},
+      {d:"cohesion", tag:"Silos", t:"Teams here work in silos and rarely collaborate unless forced to."},
+      {d:"cohesion", tag:"Friction", t:"There's visible friction, blame, or quiet resentment between team members."},
+      {d:"cohesion", tag:"Disengaged", t:"Team members do the minimum — the discretionary effort is gone."},
+      {d:"culture", tag:"Mistakes", t:"Mistakes here tend to be punished or ridiculed rather than examined."},
+      {d:"culture", tag:"Silence", t:"People stay quiet in meetings and save their real opinions for the corridor."},
+      {d:"culture", tag:"Modelling", t:"Our senior leaders visibly model overwork — and everyone below copies it."},
+      {d:"retention", tag:"Turnover", t:"We've lost managers (or strong performers) in the last 12 months who 'seemed fine'."},
+      {d:"retention", tag:"Exit signals", t:"Exit interviews or grapevine feedback mention workload, stress, or feeling unsupported."},
+      {d:"retention", tag:"Backfill", t:"When a manager leaves, it takes months and real money to recover."}
+    ],
+    bands: [
+      {min:15, max:30, label:"Healthy", color:"var(--teal)", text:"Your organisation looks resilient. Keep investing in your managers before you need to — prevention is the cheapest program you'll ever run."},
+      {min:31, max:45, label:"Early warning", color:"var(--gold)", text:"The quiet pattern is starting. Nothing is on fire — which is exactly why now is the cheapest moment to act."},
+      {min:46, max:60, label:"At risk", color:"var(--terra)", text:"The conditions that make good managers leave are present and active. The resignations may not have started yet — the deciding has."},
+      {min:61, max:75, label:"Critical", color:"var(--crimson)", text:"By this score, you likely already know who's about to leave. Every month of inaction now has a price tag — see the calculator above for yours."}
+    ]
+  }
+};
+
+/* program mapping: which dims feed which program, per track */
+const PROGRAMS = {
+  trust:    {name:"TRUST Manager Training", desc:"The 5 shifts from doer to leader — for managers promoted without being prepared. HRDC levy-claimable.", me:["trap"], org:["ready"]},
+  coaching: {name:"1-on-1 Coaching", desc:"Private, practical support for the manager already running on empty.", me:["signs"], org:["load"]},
+  team:     {name:"Team Building & Cohesion", desc:"A cohesion roadmap that rebuilds trust across the team — not just games.", me:["drivers"], org:["cohesion"]},
+  retreat:  {name:"Leadership Retreat / Workshop", desc:"Reset the culture where it's set: the leadership team itself.", me:[], org:["culture"]}
+};
+
+let track = "org";
+let lastResult = null;
+let lastCalc = null;
+
+/* ================= RENDER ================= */
+function renderQuestions(){
+  const bank = BANKS[track];
+  const form = document.getElementById("questions");
+  form.innerHTML = "";
+  bank.questions.forEach((q,i)=>{
+    const div = document.createElement("div");
+    div.className = "q";
+    let opts = "";
+    for(let v=1; v<=5; v++){
+      opts += `<label><input type="radio" name="q${i}" value="${v}"><span><span class="num">${v}</span>${["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"][v-1]}</span></label>`;
+    }
+    div.innerHTML = `<p><span class="tag">${q.tag}</span>${i+1}. ${q.t}</p><div class="opts">${opts}</div>`;
+    form.appendChild(div);
+  });
+  document.getElementById("report").style.display = "none";
+  document.getElementById("warn").style.display = "none";
+}
+
+function setTrack(t){
+  track = t;
+  document.getElementById("tab-me").classList.toggle("active", t==="me");
+  document.getElementById("tab-org").classList.toggle("active", t==="org");
+  renderQuestions();
+}
+
+/* ================= SCORING ================= */
+function calculate(){
+  const bank = BANKS[track];
+  const answers = [];
+  for(let i=0; i<bank.questions.length; i++){
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel){ document.getElementById("warn").style.display="block"; return; }
+    answers.push(parseInt(sel.value));
+  }
+  document.getElementById("warn").style.display="none";
+
+  const dimScores = {};
+  bank.dims.forEach(d=>dimScores[d.id]=0);
+  bank.questions.forEach((q,i)=>dimScores[q.d]+=answers[i]);
+  const total = answers.reduce((a,b)=>a+b,0);
+  const band = bank.bands.find(b=>total>=b.min && total<=b.max);
+
+  document.getElementById("total").textContent = total;
+  const bandEl = document.getElementById("band");
+  bandEl.textContent = band.label;
+  bandEl.style.background = band.color;
+  document.getElementById("interpret").innerHTML = `<strong>${band.label}.</strong> ${band.text}`;
+
+  /* dimension bars */
+  const bars = document.getElementById("dimbars");
+  bars.innerHTML = "";
+  bank.dims.forEach(d=>{
+    const pct = Math.round(dimScores[d.id]/d.max*100);
+    bars.innerHTML += `<div class="dim"><div class="lbl"><span>${d.name}</span><span>${dimScores[d.id]}/${d.max}</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%; background:${pct>=80?'var(--crimson)':pct>=60?'var(--terra)':'var(--teal)'}"></div></div></div>`;
+  });
+
+  /* program recommendations */
+  const list = document.getElementById("progList");
+  list.innerHTML = "";
+  const recs = [];
+  Object.entries(PROGRAMS).forEach(([key,p])=>{
+    const dims = p[track];
+    if(!dims || !dims.length) return;
+    const score = dims.reduce((a,id)=>a+(dimScores[id]||0),0);
+    const max = dims.reduce((a,id)=>a+BANKS[track].dims.find(d=>d.id===id).max,0);
+    const pct = score/max;
+    let pri = null;
+    if(pct>=0.85) pri="critical"; else if(pct>=0.65) pri="recommended"; else if(pct>=0.5) pri="watch";
+    if(pri) recs.push({key, name:p.name, desc:p.desc, pri, pct});
+  });
+  recs.sort((a,b)=>b.pct-a.pct);
+  if(recs.length===0){
+    list.innerHTML = `<div class="prog"><h4>Nothing urgent — and that's worth protecting.</h4><p>Your scores don't point to a specific program right now. The free 5-Shifts guide below is the best prevention you can hand your managers today.</p></div>`;
+  } else {
+    recs.forEach(r=>{
+      const priLabel = {critical:"Act now", recommended:"Recommended", watch:"Worth watching"}[r.pri];
+      list.innerHTML += `<div class="prog"><span class="pri ${r.pri}">${priLabel}</span><h4>${r.name}</h4><p>${r.desc}</p></div>`;
+    });
+  }
+
+  /* org track: echo calculator if used, or retention high */
+  const echo = document.getElementById("costEcho");
+  echo.style.display = "none";
+  if(track==="org"){
+    if(lastCalc){
+      echo.style.display = "block";
+      echo.innerHTML = `<strong>Your own number:</strong> based on the calculator above, losing your at-risk managers would cost an estimated <strong>${lastCalc.midFmt}</strong> (range ${lastCalc.lowFmt}–${lastCalc.highFmt}). Compare that with the cost of one program.`;
+    } else if(dimScores.retention>=10){
+      echo.style.display = "block";
+      echo.innerHTML = `<strong>Your retention score is high.</strong> Scroll up and run the cost calculator — put a ringgit figure on what doing nothing costs.`;
+    }
+  }
+
+  lastResult = {track, total, band:band.label, dims:dimScores, programs:recs.map(r=>r.name).join(", ")||"None flagged"};
+  document.getElementById("leadForm").style.display="block";
+  document.getElementById("thanks").style.display="none";
+  document.getElementById("report").style.display = "block";
+  document.getElementById("report").scrollIntoView({behavior:"smooth"});
+}
+
+/* ================= CALCULATOR ================= */
+function fmtRM(n){ return "RM " + Math.round(n).toLocaleString("en-MY"); }
+function calcCost(){
+  const m = parseFloat(document.getElementById("c-managers").value);
+  const s = parseFloat(document.getElementById("c-salary").value);
+  const r = parseFloat(document.getElementById("c-risk").value);
+  if(!m || !s || !r || m<1 || s<=0 || r<=0 || r>100) return;
+  const atRisk = Math.max(1, Math.round(m*r/100));
+  const annual = s*12;
+  const low = atRisk*annual*0.5, mid = atRisk*annual*1.25, high = atRisk*annual*2.0;
+  lastCalc = {lowFmt:fmtRM(low), midFmt:fmtRM(mid), highFmt:fmtRM(high)};
+  document.getElementById("costMid").textContent = fmtRM(mid);
+  document.getElementById("costRange").textContent = `Research range: ${fmtRM(low)} – ${fmtRM(high)}`;
+  document.getElementById("costDetail").innerHTML = `
+    <li><strong>${atRisk}</strong> of your ${m} managers estimated at risk (${r}%)</li>
+    <li>Average annual salary: <strong>${fmtRM(annual)}</strong> each</li>
+    <li>Replacement cost per manager (50–200% of salary): <strong>${fmtRM(annual*0.5)} – ${fmtRM(annual*2)}</strong></li>`;
+  document.getElementById("calcOut").style.display = "block";
+}
+
+/* ================= LEAD CAPTURE (Formspree) ================= */
+function sendLead(e){
+  e.preventDefault();
+  const btn = document.getElementById("leadBtn");
+  btn.textContent = "Sending…"; btn.disabled = true;
+  const payload = {
+    name: document.getElementById("leadName").value,
+    email: document.getElementById("leadEmail").value,
+    company: document.getElementById("leadOrg").value,
+    source: "burnout-manager-landing",
+    check_type: lastResult ? (lastResult.track==="org" ? "Organisation check" : "Individual check") : "none",
+    total_score: lastResult ? lastResult.total + "/75" : "",
+    band: lastResult ? lastResult.band : "",
+    dimension_scores: lastResult ? JSON.stringify(lastResult.dims) : "",
+    recommended_programs: lastResult ? lastResult.programs : "",
+    calculator_estimate: lastCalc ? lastCalc.midFmt : "not used"
+  };
+  fetch("https://formspree.io/f/xykqzpjp", {
+    method:"POST",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body: JSON.stringify(payload)
+  }).then(res=>{
+    if(res.ok){
+      document.getElementById("leadForm").style.display="none";
+      document.getElementById("thanks").style.display="block";
+    } else {
+      btn.textContent = "Something went wrong — try again"; btn.disabled = false;
+    }
+  }).catch(()=>{
+    btn.textContent = "Something went wrong — try again"; btn.disabled = false;
+  });
+  return false;
+}
+
+/* ================= DOWNLOAD RESULTS ================= */
+function downloadResults(){
+  if(lastResult){
+    document.getElementById("printTitle").textContent =
+      lastResult.track==="org" ? "Organisation Burnout Check — Results" : "The Quiet Burnout Check — Results";
+    document.getElementById("printDate").textContent =
+      "Generated " + new Date().toLocaleDateString("en-MY", {day:"numeric", month:"long", year:"numeric"});
+  }
+  window.print(); /* user chooses "Save as PDF" in the print dialog */
+}
+
+/* init */
+renderQuestions();
+</script>
+</body>
+</html>
