@@ -288,7 +288,7 @@
     <!-- CTA: email capture + booking -->
     <div class="email-card" id="ctaCard">
       <h3>Get your full result — and what to do about it</h3>
-      <p>Leave your email and I'll send you your breakdown with the free 5-Shifts guide. No spam, no drip campaign. Just the next step.</p>
+      <p>Leave your email to unlock your results as a PDF, plus the free 5-Shifts guide — instantly, right here. No spam, no drip campaign.</p>
       <form id="leadForm" onsubmit="return sendLead(event)">
         <input type="text" id="leadName" placeholder="Your name" required>
         <input type="email" id="leadEmail" placeholder="you@company.com" required>
@@ -296,8 +296,13 @@
         <button class="btn gold" type="submit" id="leadBtn">Send me my results →</button>
       </form>
       <div id="thanks">
-        <h3>Done — check your inbox soon.</h3>
-        <p>If this raised a flag, the fastest next step is a 30-minute call. No pitch — we'll walk through your result and what I'd do first.</p>
+        <h3>Done — everything's yours below.</h3>
+        <p>Grab your results and the guide now (no waiting on an inbox):</p>
+        <p>
+          <button class="btn" onclick="downloadResults()" style="margin:0 8px 10px 0">Download my results (PDF) ↓</button>
+          <a class="btn" href="5-shifts-guide.pdf" download style="margin:0 0 10px 0">Download the 5-Shifts guide ↓</a>
+        </p>
+        <p>And if this raised a flag, the fastest next step is a 30-minute call. No pitch — we'll walk through your result and what I'd do first.</p>
         <a class="btn gold" href="https://wa.me/60149303591?text=Hi%20Sherine%2C%20I%20just%20did%20the%20burnout%20check%20and%20I%27d%20like%20to%20book%20a%2030-minute%20call." target="_blank">Book a 30-minute call on WhatsApp →</a>
       </div>
     </div>
